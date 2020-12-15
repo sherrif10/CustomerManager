@@ -35,5 +35,25 @@
         <addForeignKeyConstraint constraintName="customermanager_item_owner_fk" baseTableName="customermanager_item" baseColumnNames="owner"  referencedTableName="users"
                                  referencedColumnNames="user_id" />
     </changeSet> -->
+    <changeSet id="customermanager-2016-08-02-12-22" author="sharif">
+		<preConditions onFail="MARK_RAN">
+			<not><tableExists tableName="customermanager_customer"/></not>
+		</preConditions>
+		<comment>
+			Creating the customermanager_customer table
+		</comment>
+		<createTable tableName="customermanager_customer">
+			<column name="customermanager_customer_id" type="int" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false"/>
+			</column>
+			<column name="uuid" type="char(38)">
+				<constraints nullable="false" unique="true"></constraints>
+			</column>
+			<column name="location" type="varchar(45)" />
+			<column name="phoneNumber" type="int" />
+		</createTable>
+        <addForeignKeyConstraint constraintName="customermanager_customer_owner_fk" baseTableName="customermanager_customer" baseColumnNames="location"  referencedTableName="users"
+                                 referencedColumnNames="user_id" />
+    </changeSet> -->
  
 </databaseChangeLog>

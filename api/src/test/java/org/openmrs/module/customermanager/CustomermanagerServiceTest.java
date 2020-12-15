@@ -7,7 +7,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.customermanager.api;
+package org.openmrs.module.customermanager;
 
 import org.junit.Before;
 import org.junit.Test;
