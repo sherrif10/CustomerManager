@@ -9,34 +9,45 @@ import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.customermanager.Customer;
 import org.openmrs.module.customermanager.api.CustomerService;
 import org.openmrs.module.customermanager.api.dao.CustomerDao;
+import org.openmrs.api.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional(readOnly = true)
 public class CustomerServiceImpl extends BaseOpenmrsService implements CustomerService {
 	
 	private static final Logger log = LoggerFactory.getLogger(CustomerServiceImpl.class);
 	
-	private CustomerDao customerDao;
+	@Autowired
+	CustomerDao customerDao;
 	
+	@Autowired
+	CustomerService customerService;
+	
+	UserService UserService;
+	
+	/**
+	 * @param dao the dao to set
+	 */
 	public void setCustomerDao(CustomerDao dao) {
 		this.customerDao = dao;
 	}
 	
+	/**
+	 * @return the dao
+	 */
+	public CustomerDao getCustomerDao() {
+		return customerDao;
+	}
+	
+	public void setUserService(UserService userService) {
+		this.UserService = userService;
+	}
+	
 	@Override
-	@Transactional
-	public Customer createCustomer(Customer customer) throws APIException {
-		Customer createdCustomer = new Customer();
-		createdCustomer.getId();
-		createdCustomer.getLocation();
-		createdCustomer.getPhoneNumber();
-		if (createdCustomer.getLocation() != null) {
-			return createdCustomer;
-		}
-		
-		return customerDao.createCustomer(customer);
+	public Customer getCustomerByUuid(String uuid) throws APIException {
+		return customerDao.getCustomerByUuid(uuid);
 	}
 	
 	@Override
@@ -70,11 +81,6 @@ public class CustomerServiceImpl extends BaseOpenmrsService implements CustomerS
 	}
 	
 	@Override
-	public List<Customer> getCustomer(Customer customer) {
-		return customerDao.getCustomer(customer);
-	}
-	
-	@Override
 	public Customer getCustomerByLocation(String location) {
 		if (location == null) {
 			throw new IllegalArgumentException("location cannot be null");
@@ -90,12 +96,18 @@ public class CustomerServiceImpl extends BaseOpenmrsService implements CustomerS
 		return customerDao.getCustomerByPhoneNumber(phoneNumber);
 	}
 	
+	public List<Customer> listAll(Customer customer) {
+		return customerDao.listAll(customer);
+	}
+	
 	@Override
-	public Customer getCustomerByUuid(String uuid) {
-		if (uuid == null) {
-			throw new IllegalArgumentException("uuid cannot be null");
-		}
-		return customerDao.getCustomerByUuid(uuid);
+	public Customer createCustomer(Customer customer) throws APIException {
+		return customerDao.createCustomer(customer);
+	}
+	
+	@Override
+	public void purgeCustomer(Customer customer, String reason) {
+		return;
 	}
 	
 }

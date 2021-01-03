@@ -19,7 +19,7 @@ public class Customer extends BaseOpenmrsData {
 	
 	@ManyToOne
 	@JoinColumn(name = "Location")
-	private String Location;
+	private static String Location;
 	
 	@ManyToOne
 	@JoinColumn(name = "PhoneNumber")
@@ -35,7 +35,13 @@ public class Customer extends BaseOpenmrsData {
 		super.setUuid(uuid);
 	}
 	
-	public String getLocation() {
+	public Customer() {
+		super();
+		this.id = id;
+		PhoneNumber = getPhoneNumber();
+	}
+	
+	public static String getLocation() {
 		return Location;
 	}
 	
@@ -57,5 +63,10 @@ public class Customer extends BaseOpenmrsData {
 	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Customer saveCustomer(Customer customer) {
+		return customer;
+		
 	}
 }

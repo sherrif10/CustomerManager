@@ -22,19 +22,24 @@
   		    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
   		    http://www.springframework.org/schema/util
   		    http://www.springframework.org/schema/util/spring-util-3.0.xsd">
-
-    <context:component-scan base-package="org.openmrs.module.customermanager" />
+  		    
+ <!-- The default class to look for controller with annotations -->
+    <context:component-scan base-package="org.openmrs.module.customermanager.web.controller" />
 
     <!-- Wraps CustomermanagerService methods in DB transactions and OpenMRS interceptors,
     which set audit info like dateCreated, changedBy, etc.-->
-    <bean id="customermanager.CustomermanagerService"
+    <bean id="customerService"
             class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager" />
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.customermanager.api.impl.CustomermanagerServiceImpl">
-                <property name="dao" ref="customermanager.CustomermanagerDao" />
+            <bean class="org.openmrs.module.customermanager.api.impl.CustomerServiceImpl">
+               
+                <property name="customerdao" ref="customermanager.CustomerDao" />
+                <bean class="org.openmrs.module.customermanager.api.dao.HibernateCustomerDao">
+									<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+								</bean>
             </bean>
         </property>
         <property name="preInterceptors">
@@ -50,8 +55,8 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list>
-                <value>org.openmrs.module.customermanager.api.CustomermanagerService</value>
-                <ref bean="customermanager.CustomermanagerService" />
+                <value>org.openmrs.module.customermanager.api.CustomerService</value>
+                <ref bean="customerService" />
             </list>
         </property>
     </bean>

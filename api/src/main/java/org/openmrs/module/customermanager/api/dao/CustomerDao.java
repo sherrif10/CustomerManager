@@ -9,7 +9,7 @@ public interface CustomerDao {
 	/**
 	 * @see CustomerService#getCustomer(Integer)
 	 */
-	Customer getCustomer(Integer id);
+	public Customer getCustomer(Integer id);
 	
 	public Customer getCustomerByUuid(String uuid);
 	
@@ -23,6 +23,6 @@ public interface CustomerDao {
 	
 	public void retireCustomer(Customer customer);
 	
-	public List<Customer> getCustomer(Customer customer);
+	public List<Customer> listAll(Customer customer);
 	
 }

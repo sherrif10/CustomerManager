@@ -6,9 +6,9 @@ import org.openmrs.annotation.Authorized;
 import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.customermanager.Customer;
-import org.openmrs.module.customermanager.CustomermanagerConfig;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 public interface CustomerService extends OpenmrsService {
 	
 	/**
@@ -18,8 +18,8 @@ public interface CustomerService extends OpenmrsService {
 	 * @return
 	 */
 	@Authorized()
-	@Transactional(readOnly = true)
-	Customer getCustomerById(Integer id) throws APIException;;
+	@Transactional(readOnly = false)
+	public Customer getCustomerById(Integer id) throws APIException;;
 	
 	/**
 	 * this returns a customer with location name throws IllegalArgumentException if given null
@@ -28,7 +28,8 @@ public interface CustomerService extends OpenmrsService {
 	 * @param location
 	 * @return
 	 */
-	@Authorized()
+	@Authorized
+	@Transactional(readOnly = false)
 	public Customer getCustomerByLocation(String location);
 	
 	/**
@@ -39,6 +40,7 @@ public interface CustomerService extends OpenmrsService {
 	 * @return
 	 */
 	@Authorized
+	@Transactional(readOnly = false)
 	public Customer getCustomerByPhoneNumber(Integer phoneNumber);
 	
 	/**
@@ -47,8 +49,15 @@ public interface CustomerService extends OpenmrsService {
 	 * @param uuid
 	 * @return
 	 */
+	@Transactional(readOnly = false)
 	public Customer getCustomerByUuid(String uuid);
 	
+	/**
+	 * Creates a new customer in the customer datatase
+	 * 
+	 * @param customer
+	 * @return
+	 */
 	public Customer createCustomer(Customer customer) throws APIException;
 	
 	/**
@@ -57,7 +66,7 @@ public interface CustomerService extends OpenmrsService {
 	 * @param customer
 	 * @return
 	 */
-	@Authorized(CustomermanagerConfig.MODULE_PRIVILEGE)
+	@Authorized
 	public Customer saveCustomer(Customer customer);
 	
 	/**
@@ -66,7 +75,7 @@ public interface CustomerService extends OpenmrsService {
 	 * @param customer
 	 */
 	@Authorized
-	public void retireCustomer(Customer customer, String reason);
+	public void purgeCustomer(Customer customer, String reason);
 	
 	/**
 	 * return the customers should return empty list if no match was found
@@ -74,6 +83,6 @@ public interface CustomerService extends OpenmrsService {
 	 * @param customer
 	 * @return
 	 */
-	public List<Customer> getCustomer(Customer customer);
+	public List<Customer> listAll(Customer customer);
 	
 }
